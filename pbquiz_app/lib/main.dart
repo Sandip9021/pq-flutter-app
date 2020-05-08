@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pbquiz_app/ui/views/signup_view.dart';
+//import 'package:pbquiz_app/ui/views/home_view.dart';
+import 'package:pbquiz_app/ui/views/signin_view.dart';
+//import 'package:pbquiz_app/ui/views/signup_view.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SignUp(),
+      home: SignIn(),
     );
   }
 }
