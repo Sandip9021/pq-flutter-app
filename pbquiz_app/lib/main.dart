@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:pbquiz_app/services/service_locator.dart';
 //import 'package:pbquiz_app/ui/views/home_view.dart';
 import 'package:pbquiz_app/ui/views/signin_view.dart';
 //import 'package:pbquiz_app/ui/views/signup_view.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  setupServiceLocator();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

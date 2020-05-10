@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pbquiz_app/ui/views/quiz_start_view.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -6,6 +7,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,19 +24,33 @@ class _HomeViewState extends State<HomeView> {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Container(
-              height: 220,
               width: double.maxFinite,
               child: Card(
                 elevation: 5,
                 color: Colors.white,
-              ),
-            ),
-            Container(
-              height: 220,
-              width: double.maxFinite,
-              child: Card(
-                elevation: 5,
-                color: Colors.white,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const ListTile(
+                      leading: Icon(Icons.movie),
+                      title: Text('This weeks Quiz.'),
+                      subtitle:
+                          Text('Theme for this Fridays Pub quiz is Movies.'),
+                    ),
+                    ButtonBar(
+                      children: <Widget>[
+                        FlatButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => QuizStartView()));
+                            },
+                            child: const Text("JOIN"))
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
