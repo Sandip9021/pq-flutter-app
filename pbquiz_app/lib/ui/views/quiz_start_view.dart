@@ -27,7 +27,7 @@ class _State extends State<QuizStartView> {
               child: Text("Start"),
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Question()));
+                    MaterialPageRoute(builder: (context) => QuestionView()));
               },
             ),
           ],

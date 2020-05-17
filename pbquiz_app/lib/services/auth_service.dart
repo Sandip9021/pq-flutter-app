@@ -1,5 +1,5 @@
 class AuthService {
-  AuthService();
+  //AuthService();
 
   String _email = "test";
   String _password = "pass";
