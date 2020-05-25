@@ -21,11 +21,17 @@ class _QuizResultViewState extends State<QuizResultView> {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Text(
-              'Awesome! You have got 18 and you Rank is 2nd',
+              'Awesome! You have got 18 and your rank is 2',
               softWrap: true,
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                fontSize: 20.0,
+              ),
             ),
             RaisedButton(
               child: Text("Home"),
+              color: Theme.of(context).primaryColor,
+              textColor: Colors.white,
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => HomeView()));

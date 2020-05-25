@@ -25,6 +25,8 @@ class _State extends State<QuizStartView> {
             textSection,
             RaisedButton(
               child: Text("Start"),
+              color: Theme.of(context).primaryColor,
+              textColor: Colors.white,
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => QuestionView()));
@@ -46,6 +48,10 @@ class _State extends State<QuizStartView> {
       'lake, which warms to 20 degrees Celsius in the summer. Activities '
       'enjoyed here include rowing, and riding the summer toboggan run.',
       softWrap: true,
+      style: TextStyle(
+        fontFamily: 'Roboto',
+        fontSize: 20.0,
+      ),
     ),
   );
 }

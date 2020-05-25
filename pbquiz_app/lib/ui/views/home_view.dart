@@ -7,7 +7,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,10 +31,22 @@ class _HomeViewState extends State<HomeView> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     const ListTile(
+                      contentPadding: EdgeInsets.all(10),
                       leading: Icon(Icons.movie),
-                      title: Text('This weeks Quiz.'),
-                      subtitle:
-                          Text('Theme for this Fridays Pub quiz is Movies.'),
+                      title: Text(
+                        'Pub quiz for this Friday!',
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 20.0,
+                        ),
+                      ),
+                      subtitle: Text(
+                        'Theme for this quiz is Movies.',
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 14.0,
+                        ),
+                      ),
                     ),
                     ButtonBar(
                       children: <Widget>[

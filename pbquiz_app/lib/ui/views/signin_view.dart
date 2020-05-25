@@ -3,6 +3,7 @@ import 'package:pbquiz_app/business_logic/view_models/signin_viewmodel.dart';
 import 'package:pbquiz_app/services/service_locator.dart';
 import 'package:pbquiz_app/ui/views/home_view.dart';
 import 'package:pbquiz_app/ui/views/signup_view.dart';
+import 'package:pbquiz_app/ui/widgets/app_title.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 class SignIn extends StatefulWidget {
@@ -13,10 +14,11 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   SignInViewModel model = serviceLocator<SignInViewModel>();
   final _formKey = GlobalKey<FormState>();
-
+  TextStyle style =
+      TextStyle(fontFamily: 'Roboto', fontSize: 20.0, color: Colors.blue[600]);
   ProgressDialog pr;
-  String email, password;
   bool _isHidden = true;
+
   void _toggleVisibility() {
     setState(() {
       _isHidden = !_isHidden;
@@ -36,17 +38,12 @@ class _SignInState extends State<SignIn> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Center(
-                    child: Image.asset("assets/quiz_icon_small.png",
-                        height: 30, width: 30, alignment: Alignment.center),
-                  ),
-                  SizedBox(height: 30),
+                  AppTitle(),
                   Text(
-                    "PUB QUIZ",
+                    "Hi there! Nice to see you again.",
+                    textAlign: TextAlign.center,
+                    style: style.copyWith(color: Colors.blue, fontSize: 14.0),
                   ),
-                  SizedBox(height: 30),
-                  Text("Hi there! Nice to see you again.",
-                      textAlign: TextAlign.center),
                   signInForm(),
                   SizedBox(height: 20),
                   signUpOption(),
@@ -58,6 +55,37 @@ class _SignInState extends State<SignIn> {
   }
 
   Widget signInForm() {
+    final loginButon = Material(
+      elevation: 5.0,
+      borderRadius: BorderRadius.circular(30.0),
+      color: Color(0xff01A0C7),
+      child: MaterialButton(
+        minWidth: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        onPressed: () async {
+          // Validate returns true if the form is valid, otherwise false.
+          if (_formKey.currentState.validate()) {
+            _formKey.currentState.save();
+            pr.show();
+            var signInSuccess = await model.signIn();
+            pr.hide().then(
+              (value) {
+                if (signInSuccess) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomeView()));
+                } else {
+                  cantSignInDialog(context);
+                }
+              },
+            );
+          }
+        },
+        child: Text("Sign in",
+            textAlign: TextAlign.center,
+            style: style.copyWith(
+                color: Colors.white, fontWeight: FontWeight.bold)),
+      ),
+    );
     return Form(
       key: _formKey,
       child: Container(
@@ -69,13 +97,18 @@ class _SignInState extends State<SignIn> {
               decoration: InputDecoration(
                 hintText: "Email",
                 prefixIcon: Icon(Icons.email),
+                contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(32.0)),
               ),
-              onSaved: (val) => email = val,
+              onSaved: (val) => model.setEmail(val),
             ),
+            SizedBox(height: 10),
             TextFormField(
               obscureText: _isHidden,
               validator: (val) => val.isEmpty ? "Enter password" : null,
               decoration: InputDecoration(
+                contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                 hintText: "Password",
                 prefixIcon: Icon(Icons.lock),
                 suffixIcon: IconButton(
@@ -83,31 +116,13 @@ class _SignInState extends State<SignIn> {
                         ? Icon(Icons.visibility_off)
                         : Icon(Icons.visibility),
                     onPressed: _toggleVisibility),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(32.0)),
               ),
-              onSaved: (val) => password = val,
+              onSaved: (val) => model.setPassword(val),
             ),
             SizedBox(height: 20),
-            RaisedButton(
-              color: Colors.red,
-              textColor: Colors.white,
-              onPressed: () async {
-                // Validate returns true if the form is valid, otherwise false.
-                if (_formKey.currentState.validate()) {
-                  _formKey.currentState.save();
-                  pr.show();
-                  var signInSuccess = await model.signIn(email, password);
-                  pr.hide().then((value) {
-                    if (signInSuccess) {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => HomeView()));
-                    } else {
-                      cantSignInDialog(context);
-                    }
-                  });
-                }
-              },
-              child: const Text('Sign In', style: TextStyle(fontSize: 20)),
-            ),
+            loginButon,
           ],
         ),
       ),
@@ -122,7 +137,6 @@ class _SignInState extends State<SignIn> {
       children: <Widget>[
         Text("Don't have an account?"),
         FlatButton(
-          //color: Colors.blue,
           textColor: Colors.blue,
           disabledColor: Colors.grey,
           disabledTextColor: Colors.black,

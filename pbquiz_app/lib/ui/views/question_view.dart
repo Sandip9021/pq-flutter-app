@@ -25,19 +25,27 @@ class _QuestionState extends State<QuestionView> {
       itemBuilder: (BuildContext context, int index) {
         return Container(
           height: 50,
-          color: Colors.blue[100],
+          color: Theme.of(context).accentColor,
           child: ListTile(
-            title:
-                Text('${model.currentQuestion.optionList[index].optionText}'),
-            leading: Radio(
-              value: model.currentQuestion.optionList[index].optionId,
-              groupValue: model.selectedOptionId,
-              onChanged: (val) {
-                setState(() {
-                  model.selectedOptionId = val;
-                });
-              },
+            title: Text(
+              '${model.currentQuestion.optionList[index].optionText}',
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                fontSize: 20.0,
+              ),
             ),
+            trailing: (model.currentQuestion.optionList[index].selected)
+                ? Icon(
+                    Icons.check_box,
+                    color: Colors.white,
+                  )
+                : Icon(
+                    Icons.check_box_outline_blank,
+                    color: Colors.white,
+                  ),
+            onTap: () {
+              model.selectOption(index);
+            },
           ),
         );
       },
@@ -47,19 +55,42 @@ class _QuestionState extends State<QuestionView> {
 
   Widget questionText(QuizViewModel model) {
     return Container(
-      padding: const EdgeInsets.all(30),
+      padding: const EdgeInsets.all(10),
+      //height: 50,
       child: Text(
         '${model.questionText()}',
         softWrap: true,
+        style: TextStyle(
+          fontFamily: 'Roboto',
+          fontSize: 20.0,
+        ),
       ),
     );
   }
 
-  Widget button(QuizViewModel model) {
+  Widget questionCount(QuizViewModel model) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      child: Text(
+        'Question ${model.attemptedQuestionCount()} / ${model.totalQuestionCount()}',
+        softWrap: true,
+        style: TextStyle(
+          fontFamily: 'Roboto',
+          fontSize: 14.0,
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).primaryColor,
+        ),
+      ),
+    );
+  }
+
+  Widget nextButton(QuizViewModel model) {
     RaisedButton button;
     if (model.lastQuestion()) {
       button = RaisedButton(
         child: Text("Submit"),
+        color: Theme.of(context).primaryColor,
+        textColor: Colors.white,
         onPressed: () {
           model.submit();
           Navigator.push(context,
@@ -69,6 +100,8 @@ class _QuestionState extends State<QuestionView> {
     } else {
       button = RaisedButton(
         child: Text("Next"),
+        color: Theme.of(context).primaryColor,
+        textColor: Colors.white,
         onPressed: () {
           model.displayNext();
         },
@@ -77,32 +110,73 @@ class _QuestionState extends State<QuestionView> {
     return button;
   }
 
+  Widget backButton(QuizViewModel model) {
+    return RaisedButton(
+      child: Text("Previous"),
+      color: Theme.of(context).accentColor,
+      textColor: Colors.white,
+      onPressed: () {
+        model.displayPrevious();
+      },
+    );
+  }
+
+  Widget buttonRow(QuizViewModel model) {
+    List<Widget> buttons;
+    if (model.firstQuestion()) {
+      buttons = [
+        nextButton(model),
+      ];
+    } else {
+      buttons = [
+        backButton(model),
+        nextButton(model),
+      ];
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: buttons,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    //Widget optionsList = options(model);
+    //pr = new ProgressDialog(context);
     return ChangeNotifierProvider<QuizViewModel>(
       create: (context) => model,
       child: Consumer<QuizViewModel>(
         builder: (context, model, child) => Scaffold(
-          appBar: AppBar(
-              title: Text(
-                  "Question ${model.attemptedQuestionCount()} / ${model.totalQuestionCount()}")),
-          body: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              children: <Widget>[
-                questionText(model),
-                Container(
-                  height: 300.0,
-                  child: options(model),
-                ),
-                button(model),
-              ],
-            ),
-          ),
+          appBar: AppBar(title: Text('Todays Quiz')),
+          body: buildQuestionView(context, model),
         ),
       ),
     );
+  }
+
+  Widget buildQuestionView(BuildContext context, QuizViewModel model) {
+    if (model.loading()) {
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+      );
+    } else {
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          children: <Widget>[
+            questionCount(model),
+            questionText(model),
+            Container(
+              height: 300.0,
+              child: options(model),
+            ),
+            buttonRow(model),
+          ],
+        ),
+      );
+    }
   }
 }

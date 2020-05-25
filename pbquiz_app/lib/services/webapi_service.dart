@@ -1,10 +1,27 @@
+import 'package:http/http.dart' as http;
 import 'package:pbquiz_app/business_logic/models/quiz.dart';
+import 'dart:convert';
 
 class WebApiService {
-  Future<Quiz> fetchQuiz() {
-    return Future.delayed(
-        Duration(seconds: 1), () => new Quiz.fromJson(quizJSON));
+  final _baseURL = 'localhost:3000';
+  final _path = 'getquiz';
+  final Map<String, String> _headers = {'Accept': 'application/json'};
+  Quiz _quiz;
+  Future<Quiz> fetchQuiz() async {
+    if (_quiz == null) {
+      print('getting rates from the web');
+      var queryParameters = {
+        'id': '1009',
+      };
+      final uri = Uri.http(_baseURL, _path, queryParameters);
+      final results = await http.get(uri, headers: _headers);
+      final jsonObject = json.decode(results.body);
+      _quiz = Quiz.fromJson(jsonObject);
+    }
+    return _quiz;
   }
+
+  //New method to get the token from local storage
 
   Quiz fakeFetchQuiz() {
     return Quiz.fromJson(quizJSON);

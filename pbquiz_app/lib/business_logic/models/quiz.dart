@@ -44,15 +44,18 @@ class Question {
 class Option {
   String optionId;
   String optionText;
+  bool selected;
   Option({
     this.optionId,
     this.optionText,
+    this.selected,
   });
 
   factory Option.fromJson(Map<String, dynamic> parsedJson) {
     return Option(
       optionId: parsedJson['optionId'],
       optionText: parsedJson['optionText'],
+      selected: false,
     );
   }
 }
