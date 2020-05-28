@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pbquiz_app/business_logic/view_models/home_viewmodel.dart';
+import 'package:pbquiz_app/services/service_locator.dart';
 import 'package:pbquiz_app/ui/views/quiz_start_view.dart';
+import 'package:pbquiz_app/ui/views/signin_view.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -7,11 +10,27 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  HomeViewModel model = serviceLocator<HomeViewModel>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Home"),
+        actions: <Widget>[
+          FlatButton(
+            textColor: Colors.white,
+            onPressed: () {
+              model.signOut().then((success) {
+                if (success) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignIn()));
+                }
+              });
+            },
+            child: Text("Log out"),
+            shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+          ),
+        ],
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,

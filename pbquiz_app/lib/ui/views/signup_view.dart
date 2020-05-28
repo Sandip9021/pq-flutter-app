@@ -94,17 +94,28 @@ class _SignUpState extends State<SignUp> {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
             pr.show();
-            bool signUpSuccess = await model.signUp();
-            pr.hide().then(
-              (value) {
-                if (signUpSuccess) {
+            //bool signUpSuccess = await model.signUp();
+            model.signUp().then((success) {
+              pr.hide().then((value) {
+                if (success) {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => HomeView()));
                 } else {
                   cantSignUpDialog(context);
                 }
-              },
-            );
+              });
+            });
+
+            // pr.hide().then(
+            //   (value) {
+            //     if (signUpSuccess) {
+            //       Navigator.push(context,
+            //           MaterialPageRoute(builder: (context) => HomeView()));
+            //     } else {
+            //       cantSignUpDialog(context);
+            //     }
+            //   },
+            // );
           }
         },
         child: Text("Sign Up",

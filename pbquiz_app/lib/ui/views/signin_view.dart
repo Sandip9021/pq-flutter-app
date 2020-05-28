@@ -67,17 +67,18 @@ class _SignInState extends State<SignIn> {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
             pr.show();
-            var signInSuccess = await model.signIn();
-            pr.hide().then(
-              (value) {
-                if (signInSuccess) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomeView()));
-                } else {
-                  cantSignInDialog(context);
-                }
-              },
-            );
+            model.signIn().then((signInSuccess) {
+              pr.hide().then(
+                (value) {
+                  if (signInSuccess) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomeView()));
+                  } else {
+                    cantSignInDialog(context);
+                  }
+                },
+              );
+            });
           }
         },
         child: Text("Sign in",

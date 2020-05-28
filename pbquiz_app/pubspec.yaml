@@ -26,6 +26,7 @@ dependencies:
   get_it: ^4.0.2
   progress_dialog: ^1.2.2
   http: ^0.12.1
+  flutter_secure_storage: ^3.3.3
 
 dev_dependencies:
   flutter_test:
