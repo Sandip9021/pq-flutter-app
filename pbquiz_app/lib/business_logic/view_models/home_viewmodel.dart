@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pbquiz_app/services/webapi_service.dart';
+import 'package:pbquiz_app/services/user_service.dart';
 import 'package:pbquiz_app/services/service_locator.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  WebApiService _apiService = serviceLocator<WebApiService>();
+  UserService _apiService = serviceLocator<UserService>();
   Future<bool> signOut() async {
     try {
       await _apiService.signOut();

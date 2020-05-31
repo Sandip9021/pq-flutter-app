@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pbquiz_app/services/service_locator.dart';
-//import 'package:pbquiz_app/ui/views/home_view.dart';
-import 'package:pbquiz_app/ui/views/signin_view.dart';
-//import 'package:pbquiz_app/ui/views/signup_view.dart';
+import 'package:pbquiz_app/ui/views/signup_view.dart';
 
 void main() {
   setupServiceLocator();
@@ -31,7 +29,7 @@ class MyApp extends StatelessWidget {
           bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
         ),
       ),
-      home: SignIn(),
+      home: SignUp(),
     );
   }
 }

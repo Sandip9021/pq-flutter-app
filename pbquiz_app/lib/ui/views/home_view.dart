@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pbquiz_app/business_logic/view_models/home_viewmodel.dart';
 import 'package:pbquiz_app/services/service_locator.dart';
 import 'package:pbquiz_app/ui/views/quiz_start_view.dart';
-import 'package:pbquiz_app/ui/views/signin_view.dart';
+import 'package:pbquiz_app/ui/views/signup_view.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -23,7 +23,7 @@ class _HomeViewState extends State<HomeView> {
               model.signOut().then((success) {
                 if (success) {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SignIn()));
+                      MaterialPageRoute(builder: (context) => SignUp()));
                 }
               });
             },

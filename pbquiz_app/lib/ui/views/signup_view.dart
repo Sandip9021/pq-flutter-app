@@ -4,6 +4,7 @@ import 'package:pbquiz_app/services/service_locator.dart';
 import 'package:pbquiz_app/ui/views/home_view.dart';
 import 'package:pbquiz_app/ui/widgets/app_title.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -16,9 +17,8 @@ class _SignUpState extends State<SignUp> {
   TextStyle style =
       TextStyle(fontFamily: 'Roboto', fontSize: 20.0, color: Colors.blue[600]);
   ProgressDialog pr;
-  //String name, email, password;
-  bool _isHidden = true;
 
+  bool _isHidden = true;
   void _toggleVisibility() {
     setState(() {
       _isHidden = !_isHidden;
@@ -28,26 +28,34 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     pr = new ProgressDialog(context);
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Container(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  AppTitle(),
-                  Text(
-                    "Create an account to join",
-                    textAlign: TextAlign.center,
-                    style: style.copyWith(color: Colors.blue, fontSize: 14.0),
-                  ),
-                  SizedBox(height: 20),
-                  signUpForm(),
-                  signInOption(),
-                ]),
+    return ChangeNotifierProvider<SignUpViewModel>(
+      create: (context) => model,
+      child: Consumer<SignUpViewModel>(
+        builder: (context, model, child) => Scaffold(
+          body: SingleChildScrollView(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Container(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      AppTitle(),
+                      Text(
+                        model.isSignUp()
+                            ? "Create an account to join"
+                            : "Hi there! Nice to see you again.",
+                        textAlign: TextAlign.center,
+                        style:
+                            style.copyWith(color: Colors.blue, fontSize: 14.0),
+                      ),
+                      SizedBox(height: 20),
+                      signUpForm(),
+                      signInOption(),
+                    ]),
+              ),
+            ),
           ),
         ),
       ),
@@ -60,11 +68,11 @@ class _SignUpState extends State<SignUp> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Sign Up failed!'),
+          title: Text('Snap! Something went wrong!'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Account already exists!'),
+                Text(model.isSignUp() ? 'Sign up failed!' : 'Sign in failed!'),
               ],
             ),
           ),
@@ -95,7 +103,7 @@ class _SignUpState extends State<SignUp> {
             _formKey.currentState.save();
             pr.show();
             //bool signUpSuccess = await model.signUp();
-            model.signUp().then((success) {
+            model.submit().then((success) {
               pr.hide().then((value) {
                 if (success) {
                   Navigator.push(context,
@@ -105,75 +113,72 @@ class _SignUpState extends State<SignUp> {
                 }
               });
             });
-
-            // pr.hide().then(
-            //   (value) {
-            //     if (signUpSuccess) {
-            //       Navigator.push(context,
-            //           MaterialPageRoute(builder: (context) => HomeView()));
-            //     } else {
-            //       cantSignUpDialog(context);
-            //     }
-            //   },
-            // );
           }
         },
-        child: Text("Sign Up",
+        child: Text(model.isSignUp() ? "Sign up" : "Sign in",
             textAlign: TextAlign.center,
             style: style.copyWith(
                 color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
+    final nameTextFormField = TextFormField(
+      validator: (val) => val.isEmpty ? "Enter name" : null,
+      decoration: InputDecoration(
+        hintText: "Name",
+        prefixIcon: Icon(Icons.account_circle),
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+      ),
+      onSaved: (val) => model.setName(val),
+    );
+    final emailTextFormField = TextFormField(
+      validator: (val) => val.isEmpty ? "Enter email" : null,
+      decoration: InputDecoration(
+        hintText: "Email",
+        prefixIcon: Icon(Icons.email),
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+      ),
+      onSaved: (val) => model.setEmail(val),
+    );
+    final passwordTextFormField = TextFormField(
+      obscureText: _isHidden,
+      validator: (val) => val.isEmpty ? "Enter password" : null,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        hintText: "Password",
+        prefixIcon: Icon(Icons.lock),
+        suffixIcon: IconButton(
+            icon:
+                _isHidden ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+            onPressed: _toggleVisibility),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+      ),
+      onSaved: (val) => model.setPassword(val),
+    );
+
+    final signUpFormFields = <Widget>[
+      nameTextFormField,
+      SizedBox(height: 10),
+      emailTextFormField,
+      SizedBox(height: 10),
+      passwordTextFormField,
+      SizedBox(height: 20),
+      signUpButton,
+    ];
+    final signInFormFields = <Widget>[
+      emailTextFormField,
+      SizedBox(height: 10),
+      passwordTextFormField,
+      SizedBox(height: 20),
+      signUpButton,
+    ];
     return Form(
       key: _formKey,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20, horizontal: 45),
         child: Column(
-          children: <Widget>[
-            TextFormField(
-              validator: (val) => val.isEmpty ? "Enter name" : null,
-              decoration: InputDecoration(
-                hintText: "Name",
-                prefixIcon: Icon(Icons.account_circle),
-                contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(32.0)),
-              ),
-              onSaved: (val) => model.setName(val),
-            ),
-            SizedBox(height: 10),
-            TextFormField(
-              validator: (val) => val.isEmpty ? "Enter email" : null,
-              decoration: InputDecoration(
-                hintText: "Email",
-                prefixIcon: Icon(Icons.email),
-                contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(32.0)),
-              ),
-              onSaved: (val) => model.setEmail(val),
-            ),
-            SizedBox(height: 10),
-            TextFormField(
-              obscureText: _isHidden,
-              validator: (val) => val.isEmpty ? "Enter password" : null,
-              decoration: InputDecoration(
-                hintText: "Password",
-                prefixIcon: Icon(Icons.lock),
-                contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(32.0)),
-                suffixIcon: IconButton(
-                    icon: _isHidden
-                        ? Icon(Icons.visibility_off)
-                        : Icon(Icons.visibility),
-                    onPressed: _toggleVisibility),
-              ),
-              onSaved: (val) => model.setPassword(val),
-            ),
-            SizedBox(height: 20),
-            signUpButton,
-          ],
+          children: model.isSignUp() ? signUpFormFields : signInFormFields,
         ),
       ),
     );
@@ -185,7 +190,9 @@ class _SignUpState extends State<SignUp> {
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Text("Already have an account?"),
+        Text(model.isSignUp()
+            ? "Already have an account?"
+            : "Don't have an account?"),
         FlatButton(
           //color: Colors.blue,
           textColor: Colors.blue,
@@ -194,10 +201,10 @@ class _SignUpState extends State<SignUp> {
           padding: EdgeInsets.all(8.0),
           splashColor: Colors.blueAccent,
           onPressed: () {
-            Navigator.pop(context);
+            model.toogleView();
           },
           child: Text(
-            "Sign in",
+            model.isSignUp() ? "Sign in" : "Sign up",
             style: TextStyle(fontSize: 20.0),
           ),
         )

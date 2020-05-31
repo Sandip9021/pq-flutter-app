@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pbquiz_app/business_logic/models/quiz.dart';
 import 'package:pbquiz_app/services/service_locator.dart';
-import 'package:pbquiz_app/services/webapi_service.dart';
+import 'package:pbquiz_app/services/quiz_service.dart';
 
 class QuizViewModel extends ChangeNotifier {
-  final WebApiService _apiService = serviceLocator<WebApiService>();
-  //storage service
-  //var token = storageservice.getToken()
-  //apiservice.fetchQuiz(token);
+  final QuizService _apiService = serviceLocator<QuizService>();
   Quiz quiz;
   Question currentQuestion;
   var currentQuestionIdex;
@@ -19,7 +16,7 @@ class QuizViewModel extends ChangeNotifier {
   }
 
   void loadQuiz() async {
-    quiz = await _apiService.fetchQuiz();
+    quiz = await _apiService.fetchQuiz('1009');
     _answerList = AnswerList(
       quizId: quiz.quizId,
       answers: List<Answer>(),
