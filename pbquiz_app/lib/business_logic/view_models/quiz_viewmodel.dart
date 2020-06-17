@@ -6,6 +6,7 @@ import 'package:pbquiz_app/services/quiz_service.dart';
 class QuizViewModel extends ChangeNotifier {
   final QuizService _apiService = serviceLocator<QuizService>();
   Quiz quiz;
+  Result result;
   Question currentQuestion;
   var currentQuestionIdex;
   AnswerList _answerList;
@@ -16,9 +17,10 @@ class QuizViewModel extends ChangeNotifier {
   }
 
   void loadQuiz() async {
-    quiz = await _apiService.fetchQuiz('1009');
+    quiz = await _apiService.fetchQuiz('5ed34c1b3d86374fecd7c0b3');
     _answerList = AnswerList(
       quizId: quiz.quizId,
+      userId: await _apiService.getUserID(),
       answers: List<Answer>(),
     );
     currentQuestionIdex = 0;
@@ -81,7 +83,7 @@ class QuizViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void submit() {
+  Future<bool> submit() async {
     for (var question in quiz.questions) {
       String selectedOptionId = "not_attempted";
       for (var option in question.optionList) {
@@ -96,6 +98,11 @@ class QuizViewModel extends ChangeNotifier {
       );
       _answerList.answers.add(answer);
     }
-    _apiService.submitAnswer(_answerList);
+    try {
+      result = await _apiService.submitQuiz(_answerList);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

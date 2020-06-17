@@ -48,6 +48,7 @@ class SignUpViewModel extends ChangeNotifier {
   Future<bool> signUp() async {
     try {
       _user = await _apiService.registerUser(_name, _email, _password);
+      await _apiService.storeUserID(_user.userId);
       return true;
     } catch (error) {
       return false;
@@ -57,6 +58,7 @@ class SignUpViewModel extends ChangeNotifier {
   Future<bool> signIn() async {
     try {
       _user = await _apiService.signIn(_email, _password);
+      await _apiService.storeUserID(_user.userId);
       return true;
     } catch (error) {
       return false;

@@ -7,6 +7,8 @@ void main() {
   runApp(MyApp());
 }
 
+const themeBlue = const Color(0xff1724fe);
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -25,8 +27,8 @@ class MyApp extends StatelessWidget {
         textTheme: TextTheme(
           headline1: TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold),
           headline6: TextStyle(fontSize: 20.0, fontStyle: FontStyle.normal),
-          bodyText1: TextStyle(fontSize: 16.0, fontFamily: 'Hind'),
-          bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+          bodyText1: TextStyle(fontSize: 16.0, fontFamily: 'Roboto'),
+          bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Roboto'),
         ),
       ),
       home: SignUp(),

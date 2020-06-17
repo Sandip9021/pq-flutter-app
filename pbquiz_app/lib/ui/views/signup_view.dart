@@ -38,22 +38,22 @@ class _SignUpState extends State<SignUp> {
               height: MediaQuery.of(context).size.height,
               child: Container(
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      AppTitle(),
-                      Text(
-                        model.isSignUp()
-                            ? "Create an account to join"
-                            : "Hi there! Nice to see you again.",
-                        textAlign: TextAlign.center,
-                        style:
-                            style.copyWith(color: Colors.blue, fontSize: 14.0),
-                      ),
-                      SizedBox(height: 20),
-                      signUpForm(),
-                      signInOption(),
-                    ]),
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    AppTitle(),
+                    Text(
+                      model.isSignUp()
+                          ? "Create an account to join"
+                          : "Hi there! Nice to see you again.",
+                      textAlign: TextAlign.center,
+                      style: style.copyWith(color: Colors.blue, fontSize: 14.0),
+                    ),
+                    SizedBox(height: 20),
+                    signUpForm(),
+                    signInOption(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -93,7 +93,7 @@ class _SignUpState extends State<SignUp> {
     final signUpButton = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
-      color: Color(0xff01A0C7),
+      color: Color(0xff1724fe),
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -124,6 +124,8 @@ class _SignUpState extends State<SignUp> {
     final nameTextFormField = TextFormField(
       validator: (val) => val.isEmpty ? "Enter name" : null,
       decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
         hintText: "Name",
         prefixIcon: Icon(Icons.account_circle),
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -134,6 +136,8 @@ class _SignUpState extends State<SignUp> {
     final emailTextFormField = TextFormField(
       validator: (val) => val.isEmpty ? "Enter email" : null,
       decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
         hintText: "Email",
         prefixIcon: Icon(Icons.email),
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),

@@ -92,9 +92,16 @@ class _QuestionState extends State<QuestionView> {
         color: Theme.of(context).primaryColor,
         textColor: Colors.white,
         onPressed: () {
-          model.submit();
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => QuizResultView()));
+          model.submit().then((success) {
+            if (success) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => QuizResultView(
+                            result: model.result,
+                          )));
+            }
+          });
         },
       );
     } else {

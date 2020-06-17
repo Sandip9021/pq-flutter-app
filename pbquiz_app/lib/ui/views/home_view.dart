@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pbquiz_app/business_logic/view_models/home_viewmodel.dart';
 import 'package:pbquiz_app/services/service_locator.dart';
+import 'package:pbquiz_app/ui/views/create_quiz_view.dart';
 import 'package:pbquiz_app/ui/views/quiz_start_view.dart';
 import 'package:pbquiz_app/ui/views/signup_view.dart';
 
@@ -77,6 +78,48 @@ class _HomeViewState extends State<HomeView> {
                                       builder: (context) => QuizStartView()));
                             },
                             child: const Text("JOIN"))
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              width: double.maxFinite,
+              child: Card(
+                elevation: 5,
+                color: Colors.white,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const ListTile(
+                      contentPadding: EdgeInsets.all(10),
+                      leading: Icon(Icons.movie),
+                      title: Text(
+                        'Create Quiz',
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 20.0,
+                        ),
+                      ),
+                      subtitle: Text(
+                        'Create your own quiz and invite your firends.',
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 14.0,
+                        ),
+                      ),
+                    ),
+                    ButtonBar(
+                      children: <Widget>[
+                        FlatButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CreateQuizView()));
+                            },
+                            child: const Text("CREATE"))
                       ],
                     ),
                   ],

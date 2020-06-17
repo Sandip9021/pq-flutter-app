@@ -32,6 +32,7 @@ class UserService extends WebApiService {
       final token = jsonObject['token'];
       final userJSON = jsonObject['user'];
       storeAuthToken(token);
+      storeUserID(userJSON['_id']);
       return User.fromJson(userJSON);
     } else {
       throw Exception('Failed to register user');
@@ -64,6 +65,7 @@ class UserService extends WebApiService {
       final token = jsonObject['token'];
       final userJSON = jsonObject['user'];
       storeAuthToken(token);
+      storeUserID(userJSON['_id']);
       return User.fromJson(userJSON);
     } else {
       throw Exception('Failed to register user');

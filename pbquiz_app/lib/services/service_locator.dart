@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:pbquiz_app/business_logic/view_models/create_quiz_viewmodel.dart';
 import 'package:pbquiz_app/business_logic/view_models/home_viewmodel.dart';
 import 'package:pbquiz_app/business_logic/view_models/quiz_viewmodel.dart';
 import 'package:pbquiz_app/business_logic/view_models/signup_viewmodel.dart';
@@ -16,4 +17,6 @@ void setupServiceLocator() {
   serviceLocator.registerFactory<SignUpViewModel>(() => SignUpViewModel());
   serviceLocator.registerFactory<QuizViewModel>(() => QuizViewModel());
   serviceLocator.registerFactory<HomeViewModel>(() => HomeViewModel());
+  serviceLocator
+      .registerFactory<CreateQuizViewModel>(() => CreateQuizViewModel());
 }
