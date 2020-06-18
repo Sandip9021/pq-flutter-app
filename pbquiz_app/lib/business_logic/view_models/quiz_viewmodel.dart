@@ -16,8 +16,8 @@ class QuizViewModel extends ChangeNotifier {
     return _loadingQuiz;
   }
 
-  void loadQuiz() async {
-    quiz = await _apiService.fetchQuiz('5ed34c1b3d86374fecd7c0b3');
+  void loadQuiz(String quizId) async {
+    quiz = await _apiService.fetchQuiz(quizId);
     _answerList = AnswerList(
       quizId: quiz.quizId,
       userId: await _apiService.getUserID(),

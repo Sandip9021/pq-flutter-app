@@ -4,6 +4,23 @@ import 'package:pbquiz_app/business_logic/models/quiz.dart';
 import 'package:pbquiz_app/services/webapi_service.dart';
 
 class QuizService extends WebApiService {
+  Future<List<Quiz>> fetchAllQuizes() async {
+    print('Getting all quizes');
+    final _path = 'quiz/getallquiz';
+    final token = await getAuthToken();
+    final _headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final uri = Uri.http(baseURl, _path);
+    final results = await http.get(uri, headers: _headers);
+    final jsonObject = json.decode(results.body);
+    var list = jsonObject as List;
+    List<Quiz> quizList = list.map((i) => Quiz.fromJson(i)).toList();
+    return quizList;
+  }
+
   //fetch quiz
   Future<Quiz> fetchQuiz(String id) async {
     print('getting rates from the web');

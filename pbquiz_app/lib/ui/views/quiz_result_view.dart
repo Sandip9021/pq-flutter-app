@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pbquiz_app/business_logic/models/quiz.dart';
 import 'package:pbquiz_app/ui/views/home_view.dart';
 
 class QuizResultView extends StatelessWidget {
-  final Result result;
+  final String result;
   QuizResultView({Key key, @required this.result}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -19,7 +18,7 @@ class QuizResultView extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Text(
-              'Awesome! You have got ${result.totalScore}!!',
+              'Awesome! You have got $result!!',
               softWrap: true,
               style: TextStyle(
                 fontFamily: 'Roboto',

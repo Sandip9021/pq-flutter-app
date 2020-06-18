@@ -1,5 +1,4 @@
 //import 'package:flutter/material.dart';
-import 'package:pbquiz_app/business_logic/models/user.dart';
 
 class Quiz {
   String quizId;
@@ -19,16 +18,26 @@ class Quiz {
 
   factory Quiz.fromJson(Map<String, dynamic> parsedJson) {
     var list = parsedJson['questions'] as List;
-    List<Question> questionList =
-        list.map((i) => Question.fromJson(i)).toList();
-    return Quiz(
-      quizId: parsedJson['_id'],
-      quizName: parsedJson['quizName'],
-      quizDescription: parsedJson['quizDescription'],
-      scheduledDate: parsedJson['scheduledDate'],
-      createdBy: parsedJson['createdBy'],
-      questions: questionList,
-    );
+    if (list != null) {
+      List<Question> questionList =
+          list.map((i) => Question.fromJson(i)).toList();
+      return Quiz(
+        quizId: parsedJson['_id'],
+        quizName: parsedJson['quizName'],
+        quizDescription: parsedJson['quizDescription'],
+        scheduledDate: parsedJson['scheduledDate'],
+        createdBy: parsedJson['createdBy'],
+        questions: questionList,
+      );
+    } else {
+      return Quiz(
+        quizId: parsedJson['_id'],
+        quizName: parsedJson['quizName'],
+        quizDescription: parsedJson['quizDescription'],
+        scheduledDate: parsedJson['scheduledDate'],
+        createdBy: parsedJson['createdBy'],
+      );
+    }
   }
 
   Map<String, dynamic> toJson() {

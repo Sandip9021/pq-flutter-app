@@ -5,6 +5,8 @@ import 'package:pbquiz_app/ui/views/quiz_result_view.dart';
 import 'package:provider/provider.dart';
 
 class QuestionView extends StatefulWidget {
+  final String quizId;
+  QuestionView({Key key, @required this.quizId}) : super(key: key);
   @override
   _QuestionState createState() => _QuestionState();
 }
@@ -14,7 +16,7 @@ class _QuestionState extends State<QuestionView> {
 
   @override
   void initState() {
-    model.loadQuiz();
+    model.loadQuiz(this.widget.quizId);
     super.initState();
   }
 
@@ -98,7 +100,14 @@ class _QuestionState extends State<QuestionView> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => QuizResultView(
-                            result: model.result,
+                            result: model.result.totalScore,
+                          )));
+            } else {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => QuizResultView(
+                            result: 'You have already submitted this once!',
                           )));
             }
           });

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pbquiz_app/ui/views/question_view.dart';
 
 class QuizStartView extends StatefulWidget {
+  final String quizId;
+  QuizStartView({Key key, @required this.quizId}) : super(key: key);
   @override
   _State createState() => _State();
 }
@@ -28,8 +30,12 @@ class _State extends State<QuizStartView> {
               color: Theme.of(context).primaryColor,
               textColor: Colors.white,
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => QuestionView()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => QuestionView(
+                              quizId: this.widget.quizId,
+                            )));
               },
             ),
           ],
