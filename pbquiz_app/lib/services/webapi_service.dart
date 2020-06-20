@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:pbquiz_app/business_logic/models/quiz.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -41,8 +44,48 @@ class WebApiService {
     return Quiz.fromJson(quizJSON);
   }
 
-  void submitAnswer(AnswerList answerList) {
-    print("Submitted successfully!");
+  Future post(String path, Map body) async {
+    final token = await getAuthToken();
+    final _headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final bodyEncoded = jsonEncode(body);
+    final uri = Uri.http(baseURl, path);
+    final results = await http.post(
+      uri,
+      body: bodyEncoded,
+      headers: _headers,
+    );
+    if (results.statusCode == 201) {
+      final jsonObject = json.decode(results.body);
+      return jsonObject;
+    } else {
+      throw Exception('POST method failed - $path ');
+    }
+  }
+
+  Future get(String path, [Map queryParameters]) async {
+    final token = await getAuthToken();
+    final _headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final uri = queryParameters == null
+        ? Uri.http(baseURl, path)
+        : Uri.http(baseURl, path, queryParameters);
+    final results = await http.get(
+      uri,
+      headers: _headers,
+    );
+    if (results.statusCode == 200) {
+      final jsonObject = json.decode(results.body);
+      return jsonObject;
+    } else {
+      throw Exception('GET method failed - $path ');
+    }
   }
 }
 

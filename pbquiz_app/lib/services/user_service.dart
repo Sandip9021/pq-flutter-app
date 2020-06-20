@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:pbquiz_app/business_logic/models/user.dart';
 import 'package:pbquiz_app/services/webapi_service.dart';
 
 class UserService extends WebApiService {
+  StreamController<User> userController = StreamController<User>();
+
   //Register
   Future<User> registerUser(
     String name,
@@ -32,8 +35,11 @@ class UserService extends WebApiService {
       final token = jsonObject['token'];
       final userJSON = jsonObject['user'];
       storeAuthToken(token);
-      storeUserID(userJSON['_id']);
-      return User.fromJson(userJSON);
+      var user = User.fromJson(userJSON);
+      if (user != null) {
+        userController.add(user);
+      }
+      return user;
     } else {
       throw Exception('Failed to register user');
     }
@@ -65,8 +71,11 @@ class UserService extends WebApiService {
       final token = jsonObject['token'];
       final userJSON = jsonObject['user'];
       storeAuthToken(token);
-      storeUserID(userJSON['_id']);
-      return User.fromJson(userJSON);
+      var user = User.fromJson(userJSON);
+      if (user != null) {
+        userController.add(user);
+      }
+      return user;
     } else {
       throw Exception('Failed to register user');
     }

@@ -9,13 +9,13 @@ class AppTitle extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Center(
-              child: Image.asset("assets/quiz_icon_small.png",
-                  height: 30, width: 30, alignment: Alignment.center),
+              child: Image.asset('assets/quiz.png',
+                  height: 64, width: 64, alignment: Alignment.center),
             ),
             SizedBox(height: 10),
             Text(
-              "PUB QUIZ",
-              style: Theme.of(context).textTheme.headline6,
+              'PUB Quiz',
+              style: Theme.of(context).textTheme.headline1,
             ),
             SizedBox(height: 20),
           ]),

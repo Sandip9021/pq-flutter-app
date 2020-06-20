@@ -9,7 +9,10 @@ class User {
     this.name,
     this.email,
   });
-
+  User.initial()
+      : userId = '',
+        name = '',
+        email = '';
   factory User.fromJson(Map<String, dynamic> parsedJson) {
     return User(
       userId: parsedJson['_id'],
