@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pbquiz_app/business_logic/models/quiz.dart';
 import 'package:pbquiz_app/ui/views/home_view.dart';
 import 'package:pbquiz_app/ui/views/quiz_start_view.dart';
 import 'package:pbquiz_app/ui/views/signup_view.dart';
@@ -15,10 +16,10 @@ class Router {
         return MaterialPageRoute(builder: (_) => SignUp());
         break;
       case 'StartQuiz':
-        var id = settings.arguments as String;
+        var _quiz = settings.arguments as Quiz;
         return MaterialPageRoute(
             builder: (_) => QuizStartView(
-                  quizId: id,
+                  quiz: _quiz,
                 ));
       default:
         return MaterialPageRoute(builder: (_) {

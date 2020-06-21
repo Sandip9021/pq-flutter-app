@@ -1,22 +1,18 @@
-import 'package:flutter/material.dart';
 import 'package:pbquiz_app/business_logic/models/quiz.dart';
+import 'package:pbquiz_app/business_logic/view_models/base_viewmodel.dart';
 import 'package:pbquiz_app/services/service_locator.dart';
 import 'package:pbquiz_app/services/quiz_service.dart';
 
-class QuizViewModel extends ChangeNotifier {
+class QuizViewModel extends BaseModel {
   final QuizService _apiService = serviceLocator<QuizService>();
   Quiz quiz;
   Result result;
   Question currentQuestion;
   var currentQuestionIdex;
   AnswerList _answerList;
-  bool _loadingQuiz = true;
-
-  bool loading() {
-    return _loadingQuiz;
-  }
 
   void loadQuiz(String quizId) async {
+    setState(ViewState.Busy);
     quiz = await _apiService.fetchQuiz(quizId);
     _answerList = AnswerList(
       quizId: quiz.quizId,
@@ -25,8 +21,7 @@ class QuizViewModel extends ChangeNotifier {
     );
     currentQuestionIdex = 0;
     currentQuestion = quiz.questions[currentQuestionIdex];
-    _loadingQuiz = false;
-    notifyListeners();
+    setState(ViewState.Idle);
   }
 
   String questionText() {
@@ -44,15 +39,26 @@ class QuizViewModel extends ChangeNotifier {
     return false;
   }
 
-  bool firstQuestion() {
-    if (attemptedQuestionCount() == 1) {
-      return true;
-    }
-    return false;
-  }
-
   int attemptedQuestionCount() {
     return currentQuestionIdex + 1;
+  }
+
+  String selectedOption() {
+    String selectedOptionId = "not_attempted";
+    for (var option in currentQuestion.optionList) {
+      if (option.selected) {
+        selectedOptionId = option.optionId;
+        break;
+      }
+    }
+    return selectedOptionId;
+  }
+
+  void changeSelectedOption(String newOptionId) {
+    currentQuestion.optionList.forEach((option) {
+      option.selected = option.optionId == newOptionId ? true : false;
+    });
+    notifyListeners();
   }
 
   void selectOption(int index) {
@@ -73,12 +79,6 @@ class QuizViewModel extends ChangeNotifier {
 
   void displayNext() {
     currentQuestionIdex += 1;
-    currentQuestion = quiz.questions[currentQuestionIdex];
-    notifyListeners();
-  }
-
-  void displayPrevious() {
-    currentQuestionIdex -= 1;
     currentQuestion = quiz.questions[currentQuestionIdex];
     notifyListeners();
   }

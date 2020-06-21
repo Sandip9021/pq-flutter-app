@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:pbquiz_app/ui/views/question_view.dart';
+import 'package:pbquiz_app/business_logic/models/quiz.dart';
+import 'package:pbquiz_app/ui/shared/ui_helper.dart';
+import 'package:pbquiz_app/ui/views/quiz_view.dart';
+import 'package:pbquiz_app/ui/widgets/custom_button.dart';
 
-class QuizStartView extends StatefulWidget {
-  final String quizId;
-  QuizStartView({Key key, @required this.quizId}) : super(key: key);
-  @override
-  _State createState() => _State();
-}
+class QuizStartView extends StatelessWidget {
+  final Quiz quiz;
+  QuizStartView({Key key, @required this.quiz}) : super(key: key);
 
-class _State extends State<QuizStartView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,46 +17,57 @@ class _State extends State<QuizStartView> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+        padding: EdgeInsets.all(10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            textSection,
-            RaisedButton(
-              child: Text("Start"),
-              color: Theme.of(context).primaryColor,
-              textColor: Colors.white,
-              onPressed: () {
-                Navigator.push(
+            UIHelper.verticalSpaceLarge(),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Text(
+                'Joining ${this.quiz.quizName}!!',
+                style: Theme.of(context).textTheme.headline1,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Text('Read the rules carefully...',
+                  style: Theme.of(context).textTheme.bodyText1),
+            ),
+            UIHelper.verticalSpaceLarge(),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                'Never break the rules. '
+                'Every question has 3 wrong options and only 1 right option.  '
+                'There is no penalty for wrong answer, '
+                'but if you give a right answer within 5 seconds, '
+                'you would get bonous points. ',
+                softWrap: true,
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(90.0, 200.0, 90.0, 20),
+              child: PrimaryButton(
+                title: 'Start quiz',
+                onPressed: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => QuestionView(
-                              quizId: this.widget.quizId,
-                            )));
-              },
+                      builder: (context) => QuizView(
+                        quizId: this.quiz.quizId,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
       ),
     );
   }
-
-  Widget textSection = Container(
-    padding: const EdgeInsets.all(10),
-    child: Text(
-      'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
-      'Alps. Situated 1,578 meters above sea level, it is one of the '
-      'larger Alpine Lakes. A gondola ride from Kandersteg, followed by a '
-      'half-hour walk through pastures and pine forest, leads you to the '
-      'lake, which warms to 20 degrees Celsius in the summer. Activities '
-      'enjoyed here include rowing, and riding the summer toboggan run.',
-      softWrap: true,
-      style: TextStyle(
-        fontFamily: 'Roboto',
-        fontSize: 20.0,
-      ),
-    ),
-  );
 }

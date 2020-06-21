@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:pbquiz_app/business_logic/view_models/base_viewmodel.dart';
 import 'package:pbquiz_app/business_logic/view_models/home_viewmodel.dart';
-import 'package:pbquiz_app/services/service_locator.dart';
+import 'package:pbquiz_app/ui/shared/ui_helper.dart';
+import 'package:pbquiz_app/ui/views/base_view.dart';
 import 'package:pbquiz_app/ui/views/create_quiz_view.dart';
 import 'package:pbquiz_app/ui/views/quiz_start_view.dart';
 import 'package:pbquiz_app/ui/views/signup_view.dart';
 import 'package:provider/provider.dart';
+import 'package:pbquiz_app/business_logic/models/user.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -12,20 +15,12 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  HomeViewModel model = serviceLocator<HomeViewModel>();
-
-  @override
-  void initState() {
-    model.getAllQuiz();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<HomeViewModel>(
-      create: (context) => model,
-      child: Consumer<HomeViewModel>(
-        builder: (context, model, child) => Scaffold(
+    return BaseView<HomeViewModel>(
+      onModelReady: (model) => model.getAllQuiz(),
+      builder: (context, model, child) {
+        return Scaffold(
           appBar: AppBar(
             title: Text("Home"),
             actions: <Widget>[
@@ -45,80 +40,46 @@ class _HomeViewState extends State<HomeView> {
               ),
             ],
           ),
-          body: buildHomePage(context, model),
-          drawer: Drawer(
-            // Add a ListView to the drawer. This ensures the user can scroll
-            // through the options in the drawer if there isn't enough vertical
-            // space to fit everything.
-            child: ListView(
-              // Important: Remove any padding from the ListView.
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                DrawerHeader(
-                  child: Text('Drawer Header'),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                  ),
+          body: model.state == ViewState.Busy
+              ? Center(child: CircularProgressIndicator())
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    UIHelper.verticalSpaceSmall(),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Text(
+                        'Welcome ${Provider.of<User>(context).name},',
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Text('Here are all the quizes for you',
+                          style: Theme.of(context).textTheme.bodyText1),
+                    ),
+                    UIHelper.verticalSpaceSmall(),
+                    Expanded(
+                      child: quizList(context, model),
+                    ),
+                  ],
                 ),
-                ListTile(
-                  title: Text('Item 1'),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                  },
-                ),
-                ListTile(
-                  title: Text('Item 2'),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+          drawer: _drawer,
+        );
+      },
     );
   }
 
-  Widget buildHomePage(BuildContext context, HomeViewModel model) {
-    if (model.loading()) {
-      return Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    } else {
-      if (model.error()) {
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-          child: Text('Error fetching quizes!!'),
-        );
-      } else {
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-          child: homePageCardList(context, model),
-        );
-      }
-    }
-  }
-
-  Widget homePageCardList(BuildContext context, HomeViewModel model) {
+  Widget quizList(BuildContext context, HomeViewModel model) {
     return ListView.builder(
       itemCount: model.quizList.length,
       itemBuilder: (BuildContext context, int index) {
         return Container(
-          width: double.maxFinite,
+          padding: EdgeInsets.symmetric(vertical: 2.5, horizontal: 15.0),
           child: Card(
-            elevation: 5,
+            elevation: 3,
             color: Colors.white,
+            shadowColor: Theme.of(context).primaryColor,
             child: ListTile(
               contentPadding: EdgeInsets.all(10),
               leading: Icon(Icons.movie),
@@ -141,7 +102,7 @@ class _HomeViewState extends State<HomeView> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => QuizStartView(
-                              quizId: model.quizList[index].quizId,
+                              quiz: model.quizList[index],
                             )));
               },
             ),
@@ -150,6 +111,38 @@ class _HomeViewState extends State<HomeView> {
       },
     );
   }
+
+  var _drawer = Drawer(
+    // Add a ListView to the drawer. This ensures the user can scroll
+    // through the options in the drawer if there isn't enough vertical
+    // space to fit everything.
+    child: ListView(
+      // Important: Remove any padding from the ListView.
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        DrawerHeader(
+          child: Text('Drawer Header'),
+          decoration: BoxDecoration(
+            color: Colors.blue,
+          ),
+        ),
+        ListTile(
+          title: Text('Item 1'),
+          onTap: () {
+            // Update the state of the app.
+            // ...
+          },
+        ),
+        ListTile(
+          title: Text('Item 2'),
+          onTap: () {
+            // Update the state of the app.
+            // ...
+          },
+        ),
+      ],
+    ),
+  );
 
   Widget createQuiz() {
     return Container(

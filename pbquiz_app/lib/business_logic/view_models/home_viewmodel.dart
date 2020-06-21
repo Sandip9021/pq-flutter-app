@@ -1,45 +1,30 @@
-import 'package:flutter/material.dart';
 import 'package:pbquiz_app/business_logic/models/quiz.dart';
+import 'package:pbquiz_app/business_logic/view_models/base_viewmodel.dart';
 import 'package:pbquiz_app/services/quiz_service.dart';
 import 'package:pbquiz_app/services/user_service.dart';
 import 'package:pbquiz_app/services/service_locator.dart';
 
-class HomeViewModel extends ChangeNotifier {
+class HomeViewModel extends BaseModel {
   List<Quiz> quizList;
   UserService _userService = serviceLocator<UserService>();
   QuizService _quizService = serviceLocator<QuizService>();
-  bool _loading = true;
-  bool _error = false;
-
-  bool loading() {
-    return _loading;
-  }
-
-  bool error() {
-    return _error;
-  }
 
   Future<bool> signOut() async {
     try {
+      setState(ViewState.Busy);
       await _userService.signOut();
+      setState(ViewState.Idle);
       return true;
     } catch (error) {
+      setState(ViewState.Idle);
       return false;
     }
   }
 
   void getAllQuiz() async {
-    try {
-      quizList = await _quizService.fetchAllQuizes();
-      _loading = false;
-      _error = false;
-      print("Loading Quiz");
-      notifyListeners();
-    } catch (error) {
-      _loading = false;
-      _error = true;
-      print("Error");
-      notifyListeners();
-    }
+    setState(ViewState.Busy);
+    quizList = await _quizService.fetchAllQuizes();
+    print("Loading Quiz");
+    setState(ViewState.Idle);
   }
 }
