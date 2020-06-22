@@ -3,9 +3,7 @@ import 'package:pbquiz_app/business_logic/view_models/base_viewmodel.dart';
 import 'package:pbquiz_app/business_logic/view_models/home_viewmodel.dart';
 import 'package:pbquiz_app/ui/shared/ui_helper.dart';
 import 'package:pbquiz_app/ui/views/base_view.dart';
-import 'package:pbquiz_app/ui/views/create_quiz_view.dart';
-import 'package:pbquiz_app/ui/views/quiz_start_view.dart';
-import 'package:pbquiz_app/ui/views/signup_view.dart';
+import 'package:pbquiz_app/ui/widgets/main_menu.dart';
 import 'package:provider/provider.dart';
 import 'package:pbquiz_app/business_logic/models/user.dart';
 
@@ -29,8 +27,7 @@ class _HomeViewState extends State<HomeView> {
                 onPressed: () {
                   model.signOut().then((success) {
                     if (success) {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SignUp()));
+                      Navigator.pushNamed(context, 'Signup');
                     }
                   });
                 },
@@ -64,7 +61,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ],
                 ),
-          drawer: _drawer,
+          drawer: MainMenu(),
         );
       },
     );
@@ -98,12 +95,11 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => QuizStartView(
-                              quiz: model.quizList[index],
-                            )));
+                Navigator.pushNamed(
+                  context,
+                  'StartQuiz',
+                  arguments: model.quizList[index],
+                );
               },
             ),
           ),
@@ -111,38 +107,6 @@ class _HomeViewState extends State<HomeView> {
       },
     );
   }
-
-  var _drawer = Drawer(
-    // Add a ListView to the drawer. This ensures the user can scroll
-    // through the options in the drawer if there isn't enough vertical
-    // space to fit everything.
-    child: ListView(
-      // Important: Remove any padding from the ListView.
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        DrawerHeader(
-          child: Text('Drawer Header'),
-          decoration: BoxDecoration(
-            color: Colors.blue,
-          ),
-        ),
-        ListTile(
-          title: Text('Item 1'),
-          onTap: () {
-            // Update the state of the app.
-            // ...
-          },
-        ),
-        ListTile(
-          title: Text('Item 2'),
-          onTap: () {
-            // Update the state of the app.
-            // ...
-          },
-        ),
-      ],
-    ),
-  );
 
   Widget createQuiz() {
     return Container(
@@ -174,13 +138,11 @@ class _HomeViewState extends State<HomeView> {
             ButtonBar(
               children: <Widget>[
                 FlatButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CreateQuizView()));
-                    },
-                    child: const Text("CREATE"))
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'CreateQuiz');
+                  },
+                  child: const Text("CREATE"),
+                )
               ],
             ),
           ],

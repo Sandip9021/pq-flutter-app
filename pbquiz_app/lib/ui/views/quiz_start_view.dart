@@ -54,13 +54,10 @@ class QuizStartView extends StatelessWidget {
               child: PrimaryButton(
                 title: 'Start quiz',
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => QuizView(
-                        quizId: this.quiz.quizId,
-                      ),
-                    ),
+                    'Quiz',
+                    arguments: this.quiz.quizId,
                   );
                 },
               ),

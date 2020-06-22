@@ -53,10 +53,7 @@ class _SignUpState extends State<SignUp> {
                           _formKey.currentState.save();
                           bool success = await model.submit(this._isSignUp);
                           if (success) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomeView()));
+                            Navigator.pushNamed(context, 'Home');
                           } else {
                             cantSignUpDialog(context);
                           }

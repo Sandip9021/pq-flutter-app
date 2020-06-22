@@ -59,28 +59,17 @@ class _QuizViewState extends State<QuizView> {
                       title: 'Submit',
                       onPressed: () {
                         if (model.lastQuestion()) {
-                          model.submit().then((success) {
-                            if (success) {
-                              Navigator.push(
+                          model.submit().then(
+                            (success) {
+                              Navigator.pushNamed(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => QuizResultView(
-                                    result: model.result.totalScore,
-                                  ),
-                                ),
+                                'QuizResult',
+                                arguments: success
+                                    ? model.result.totalScore
+                                    : 'You have already submitted this once!',
                               );
-                            } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => QuizResultView(
-                                    result:
-                                        'You have already submitted this once!',
-                                  ),
-                                ),
-                              );
-                            }
-                          });
+                            },
+                          );
                         } else {
                           model.displayNext();
                         }
