@@ -37,9 +37,7 @@ class MainMenu extends StatelessWidget {
             icon: Icons.exit_to_app,
             text: 'Sign Out',
             onTap: () async {
-              await _userService.signOut().then((success) => success
-                  ? Navigator.pushReplacementNamed(context, initialRoute)
-                  : null);
+              showAlertDialog(context);
             },
           ),
         ],
@@ -90,6 +88,42 @@ class MainMenu extends StatelessWidget {
         ],
       ),
       onTap: onTap,
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Continue"),
+      onPressed: () async {
+        await _userService.signOut().then((success) => success
+            ? Navigator.pushReplacementNamed(context, initialRoute)
+            : null);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Sign out"),
+      content: Text("Would you like to sign out of the app?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

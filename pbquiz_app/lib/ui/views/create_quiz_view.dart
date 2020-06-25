@@ -38,6 +38,12 @@ class _CreateQuizViewState extends State<CreateQuizView> {
         return Scaffold(
           appBar: AppBar(
             title: Text('Create quiz'),
+            leading: BackButton(
+              color: Colors.white,
+              onPressed: () {
+                showAlertDialog(context);
+              },
+            ),
           ),
           drawer: MainMenu(),
           body: SingleChildScrollView(
@@ -141,6 +147,40 @@ class _CreateQuizViewState extends State<CreateQuizView> {
           ),
         ),
       ],
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Continue"),
+      onPressed: () {
+        Navigator.pushReplacementNamed(context, homeRoute);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Exit"),
+      content: Text("Do you want to exit?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

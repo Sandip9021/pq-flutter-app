@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pbquiz_app/business_logic/models/quiz.dart';
 import 'package:pbquiz_app/business_logic/utils/constants.dart';
 import 'package:pbquiz_app/ui/shared/ui_helper.dart';
-import 'package:pbquiz_app/ui/views/quiz_view.dart';
 import 'package:pbquiz_app/ui/widgets/custom_button.dart';
 
 class QuizStartView extends StatelessWidget {
@@ -24,7 +23,7 @@ class QuizStartView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            UIHelper.verticalSpaceLarge(),
+            UIHelper.verticalSpaceSmall(),
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: Text(
@@ -32,6 +31,7 @@ class QuizStartView extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline1,
               ),
             ),
+            UIHelper.verticalSpaceMedium(),
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: Text('Read the rules carefully...',
@@ -51,7 +51,7 @@ class QuizStartView extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(90.0, 200.0, 90.0, 20),
+              padding: const EdgeInsets.fromLTRB(90.0, 100.0, 90.0, 20),
               child: PrimaryButton(
                 title: 'Start quiz',
                 onPressed: () {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pbquiz_app/business_logic/utils/constants.dart';
-import 'package:pbquiz_app/ui/views/home_view.dart';
 
 class QuizResultView extends StatelessWidget {
   final String result;
@@ -8,7 +7,10 @@ class QuizResultView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Result')),
+      appBar: AppBar(
+        title: Text('Result'),
+        automaticallyImplyLeading: false,
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,

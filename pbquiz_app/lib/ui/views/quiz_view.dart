@@ -4,7 +4,6 @@ import 'package:pbquiz_app/business_logic/view_models/base_viewmodel.dart';
 import 'package:pbquiz_app/business_logic/view_models/quiz_viewmodel.dart';
 import 'package:pbquiz_app/ui/shared/ui_helper.dart';
 import 'package:pbquiz_app/ui/views/base_view.dart';
-import 'package:pbquiz_app/ui/views/quiz_result_view.dart';
 import 'package:pbquiz_app/ui/widgets/custom_button.dart';
 import 'package:pbquiz_app/ui/widgets/options_list.dart';
 import 'package:pbquiz_app/ui/widgets/quiz_progress.dart';
@@ -24,6 +23,12 @@ class _QuizViewState extends State<QuizView> {
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           title: Text('Quiz'),
+          leading: BackButton(
+            color: Colors.white,
+            onPressed: () {
+              showAlertDialog(context, model);
+            },
+          ),
         ),
         body: model.state == ViewState.Busy
             ? Center(child: CircularProgressIndicator())
@@ -62,7 +67,7 @@ class _QuizViewState extends State<QuizView> {
                         if (model.lastQuestion()) {
                           model.submit().then(
                             (success) {
-                              Navigator.pushNamed(
+                              Navigator.pushReplacementNamed(
                                 context,
                                 quizResultRoute,
                                 arguments: success
@@ -80,6 +85,50 @@ class _QuizViewState extends State<QuizView> {
                 ),
               ),
       ),
+    );
+  }
+
+  showAlertDialog(BuildContext context, QuizViewModel model) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Continue"),
+      onPressed: () {
+        model.submit().then(
+          (success) {
+            Navigator.pushReplacementNamed(
+              context,
+              quizResultRoute,
+              arguments: success
+                  ? model.result.totalScore
+                  : 'You have already submitted this once!',
+            );
+          },
+        );
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Exit"),
+      content: Text("Your attempt will be recorder. Do you want to exit?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

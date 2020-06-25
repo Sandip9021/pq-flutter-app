@@ -22,21 +22,6 @@ class _HomeViewState extends State<HomeView> {
         return Scaffold(
           appBar: AppBar(
             title: Text("Home"),
-            actions: <Widget>[
-              FlatButton(
-                textColor: Colors.white,
-                onPressed: () {
-                  model.signOut().then((success) {
-                    if (success) {
-                      Navigator.pushNamed(context, initialRoute);
-                    }
-                  });
-                },
-                child: Text("Log out"),
-                shape:
-                    CircleBorder(side: BorderSide(color: Colors.transparent)),
-              ),
-            ],
           ),
           body: model.state == ViewState.Busy
               ? Center(child: CircularProgressIndicator())
