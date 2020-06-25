@@ -31,6 +31,17 @@ class MyApp extends StatelessWidget {
                 fontSize: 26.0,
                 fontWeight: FontWeight.bold,
                 color: Colors.indigo),
+            headline2: TextStyle(
+              fontSize: 22.0,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.bold,
+              color: Colors.indigo,
+            ),
+            headline5: TextStyle(
+              fontSize: 16.0,
+              fontStyle: FontStyle.normal,
+              color: Colors.indigo,
+            ),
             headline6: TextStyle(
               fontSize: 20.0,
               fontStyle: FontStyle.normal,

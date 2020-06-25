@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pbquiz_app/business_logic/utils/constants.dart';
 import 'package:pbquiz_app/business_logic/view_models/base_viewmodel.dart';
 import 'package:pbquiz_app/business_logic/view_models/signup_viewmodel.dart';
 import 'package:pbquiz_app/ui/shared/ui_helper.dart';
@@ -53,7 +54,7 @@ class _SignUpState extends State<SignUp> {
                           _formKey.currentState.save();
                           bool success = await model.submit(this._isSignUp);
                           if (success) {
-                            Navigator.pushNamed(context, 'Home');
+                            Navigator.pushNamed(context, homeRoute);
                           } else {
                             cantSignUpDialog(context);
                           }

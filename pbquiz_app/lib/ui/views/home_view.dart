@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pbquiz_app/business_logic/utils/constants.dart';
 import 'package:pbquiz_app/business_logic/view_models/base_viewmodel.dart';
 import 'package:pbquiz_app/business_logic/view_models/home_viewmodel.dart';
 import 'package:pbquiz_app/ui/shared/ui_helper.dart';
@@ -27,7 +28,7 @@ class _HomeViewState extends State<HomeView> {
                 onPressed: () {
                   model.signOut().then((success) {
                     if (success) {
-                      Navigator.pushNamed(context, 'Signup');
+                      Navigator.pushNamed(context, initialRoute);
                     }
                   });
                 },
@@ -97,7 +98,7 @@ class _HomeViewState extends State<HomeView> {
               onTap: () {
                 Navigator.pushNamed(
                   context,
-                  'StartQuiz',
+                  startQuizRoute,
                   arguments: model.quizList[index],
                 );
               },
@@ -105,49 +106,6 @@ class _HomeViewState extends State<HomeView> {
           ),
         );
       },
-    );
-  }
-
-  Widget createQuiz() {
-    return Container(
-      width: double.maxFinite,
-      child: Card(
-        elevation: 5,
-        color: Colors.white,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const ListTile(
-              contentPadding: EdgeInsets.all(10),
-              leading: Icon(Icons.movie),
-              title: Text(
-                'Create Quiz',
-                style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: 20.0,
-                ),
-              ),
-              subtitle: Text(
-                'Create your own quiz and invite your firends.',
-                style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: 14.0,
-                ),
-              ),
-            ),
-            ButtonBar(
-              children: <Widget>[
-                FlatButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'CreateQuiz');
-                  },
-                  child: const Text("CREATE"),
-                )
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

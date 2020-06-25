@@ -1,32 +1,29 @@
-import 'package:flutter/material.dart';
 import 'package:pbquiz_app/business_logic/models/quiz.dart';
+import 'package:pbquiz_app/business_logic/view_models/base_viewmodel.dart';
 import 'package:pbquiz_app/services/quiz_service.dart';
 import 'package:pbquiz_app/services/service_locator.dart';
 
-class CreateQuizViewModel extends ChangeNotifier {
+class CreateQuizViewModel extends BaseModel {
   final QuizService _apiService = serviceLocator<QuizService>();
   Quiz _quiz;
-  String _quizName;
-  String _quizDescription;
-  DateTime _scheduledDate;
   String _questionText, _optionA, _optionB, _optionC, _optionD, _rightOption;
-  set quizName(value) => _quizName = value;
-  set quizDescription(value) => _quizDescription = value;
-  set scheduledDate(value) => _scheduledDate = value;
   set questionText(value) => _questionText = value;
   set optionA(value) => _optionA = value;
   set optionB(value) => _optionB = value;
   set optionC(value) => _optionC = value;
   set optionD(value) => _optionD = value;
   set rightOption(value) => _rightOption = value;
+  set quiz(value) => _quiz = value;
+  Quiz get quiz => _quiz;
 
-  void createQuiz() async {
+  void createQuiz(
+      String name, String description, DateTime date, String userId) async {
     _quiz = new Quiz(
-      quizName: _quizName,
-      quizDescription: _quizDescription,
-      scheduledDate: _scheduledDate.toString(),
+      quizName: name,
+      quizDescription: description,
+      scheduledDate: date.toString(),
       questions: new List<Question>(),
-      createdBy: await _apiService.getUserID(),
+      createdBy: userId,
     );
     print('Created Quiz object');
     print('name: ${_quiz.quizName}');
@@ -76,15 +73,14 @@ class CreateQuizViewModel extends ChangeNotifier {
   }
 
   void nextQuestion() {
-    addQuestion();
     clearData();
     notifyListeners();
   }
 
-  void submitQuiz() async {
+  Future<bool> submitQuiz() async {
     addQuestion();
     clearData();
-    await _apiService.createQuiz(this._quiz);
-    notifyListeners();
+    var result = await _apiService.createQuiz(this._quiz);
+    return result;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pbquiz_app/business_logic/utils/constants.dart';
 import 'package:pbquiz_app/business_logic/view_models/base_viewmodel.dart';
 import 'package:pbquiz_app/business_logic/view_models/quiz_viewmodel.dart';
 import 'package:pbquiz_app/ui/shared/ui_helper.dart';
@@ -63,7 +64,7 @@ class _QuizViewState extends State<QuizView> {
                             (success) {
                               Navigator.pushNamed(
                                 context,
-                                'QuizResult',
+                                quizResultRoute,
                                 arguments: success
                                     ? model.result.totalScore
                                     : 'You have already submitted this once!',

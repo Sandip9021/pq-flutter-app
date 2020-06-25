@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pbquiz_app/business_logic/utils/constants.dart';
 import 'package:pbquiz_app/ui/views/home_view.dart';
 
 class QuizResultView extends StatelessWidget {
@@ -30,8 +31,7 @@ class QuizResultView extends StatelessWidget {
               color: Theme.of(context).primaryColor,
               textColor: Colors.white,
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomeView()));
+                Navigator.pushNamed(context, homeRoute);
               },
             )
           ],

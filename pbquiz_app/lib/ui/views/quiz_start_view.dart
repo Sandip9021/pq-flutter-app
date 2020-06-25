@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pbquiz_app/business_logic/models/quiz.dart';
+import 'package:pbquiz_app/business_logic/utils/constants.dart';
 import 'package:pbquiz_app/ui/shared/ui_helper.dart';
 import 'package:pbquiz_app/ui/views/quiz_view.dart';
 import 'package:pbquiz_app/ui/widgets/custom_button.dart';
@@ -56,7 +57,7 @@ class QuizStartView extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamed(
                     context,
-                    'Quiz',
+                    quizRoute,
                     arguments: this.quiz.quizId,
                   );
                 },

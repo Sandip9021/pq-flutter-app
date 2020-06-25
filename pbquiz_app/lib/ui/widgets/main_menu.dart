@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pbquiz_app/business_logic/utils/constants.dart';
+import 'package:pbquiz_app/services/service_locator.dart';
+import 'package:pbquiz_app/services/user_service.dart';
 
 class MainMenu extends StatelessWidget {
+  final UserService _userService = serviceLocator<UserService>();
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -9,9 +13,15 @@ class MainMenu extends StatelessWidget {
         children: <Widget>[
           _createHeader(),
           _createDrawerItem(
+            icon: Icons.home,
+            text: 'Home',
+            onTap: () => Navigator.pushReplacementNamed(context, homeRoute),
+          ),
+          _createDrawerItem(
             icon: Icons.add_circle_outline,
             text: 'Create Quiz',
-            onTap: () => Navigator.pushNamed(context, 'CreateQuiz'),
+            onTap: () =>
+                Navigator.pushReplacementNamed(context, createQuizRoute),
           ),
           _createDrawerItem(
             icon: Icons.person_outline,
@@ -26,7 +36,11 @@ class MainMenu extends StatelessWidget {
           _createDrawerItem(
             icon: Icons.exit_to_app,
             text: 'Sign Out',
-            onTap: () {},
+            onTap: () async {
+              await _userService.signOut().then((success) => success
+                  ? Navigator.pushReplacementNamed(context, initialRoute)
+                  : null);
+            },
           ),
         ],
       ),
